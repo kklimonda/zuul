@@ -140,7 +140,7 @@ the following:
 Python Version Support
 ----------------------
 
-Zuul v3 requires Python 3. It does not support Python 2.
+Zuul v3 requires Python 3.5 or later. It does not support Python 2.
 
 As Ansible is used for the execution of jobs, it's important to note that
 while Ansible does support Python 3, not all of Ansible's modules do. Zuul
@@ -150,13 +150,9 @@ content will be executed with Python2.
 Roadmap
 -------
 
-* Begin using Zuul v3 to run jobs for Zuul itself
-* Implement a shim to translate Zuul v2 demand into Nodepool Zookeeper
-  launcher requests
-* Begin using Zookeeper based Nodepool launchers with Zuul v2.5 in
-  OpenStack Infra
-* Move OpenStack Infra to use Zuul v3
-* Implement Github support
+* Begin using Zuul v3 to run jobs for Zuul itself (done)
+* Implement Github support (done)
+* Move OpenStack to use Zuul v3
 * Begin using Zuul v3 to run tests on Ansible repos
 * Implement support in Nodepool for non-OpenStack clouds
 * Add native container support to Zuul / Nodepool
