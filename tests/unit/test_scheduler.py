@@ -561,11 +561,12 @@ class TestScheduler(ZuulTestCase):
         queue = self.gearman_server.getQueue()
         self.assertEqual(len(self.builds), 0)
         self.assertEqual(len(queue), 1)
-        self.assertEqual(queue[0].name, b'executor:execute')
+        self.assertEqual(queue[0].name, b'executor:execute:default')
         job_args = json.loads(queue[0].arguments.decode('utf8'))
         self.assertEqual(job_args['job'], 'project-merge')
         self.assertEqual(job_args['items'][0]['number'], '%d' % A.number)
 
+        #import ipdb; ipdb.set_trace()
         self.gearman_server.release('.*-merge')
         self.waitUntilSettled()
         self.gearman_server.release('.*-merge')
@@ -5556,3 +5557,6 @@ class TestSemaphoreInRepo(ZuulTestCase):
         self.assertEqual(A.reported, 2)
         self.assertEqual(B.reported, 2)
         self.assertEqual(C.reported, 2)
+
+    def test_executor_zones(self):
+        pass

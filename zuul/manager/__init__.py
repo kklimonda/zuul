@@ -345,7 +345,8 @@ class PipelineManager(object):
         build_set = item.current_build_set
         self.log.debug("Requesting nodes for change %s" % item.change)
         for job in jobs:
-            req = self.sched.nodepool.requestNodes(build_set, job)
+            req = self.sched.nodepool.\
+                requestNodes(build_set, job)
             self.log.debug("Adding node request %s for job %s to item %s" %
                            (req, job, item))
             build_set.setJobNodeRequest(job.name, req)

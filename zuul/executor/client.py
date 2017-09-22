@@ -138,9 +138,10 @@ class ExecutorClient(object):
         tenant = pipeline.layout.tenant
         uuid = str(uuid4().hex)
         self.log.info(
-            "Execute job %s (uuid: %s) on nodes %s for change %s "
+            "Execute job %s (uuid: %s) in zone %s, on nodes %s for change %s "
             "with dependent changes %s" % (
                 job, uuid,
+                get_default(self.config, "executor", "zone", "default"),
                 item.current_build_set.getJobNodeSet(job.name),
                 item.change,
                 [x.change for x in dependent_items]))
@@ -282,7 +283,9 @@ class ExecutorClient(object):
             self.sched.onBuildCompleted(build, 'SUCCESS', {})
             return build
 
-        gearman_job = gear.TextJob('executor:execute', json.dumps(params),
+        zone = get_default(self.config, 'executor', 'zone', 'default')
+        job_name = 'executor:execute:%s' % (zone,)
+        gearman_job = gear.TextJob(job_name, json.dumps(params),
                                    unique=uuid)
         build.__gearman_job = gearman_job
         build.__gearman_worker = None

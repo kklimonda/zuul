@@ -515,6 +515,7 @@ class ExecutorServer(object):
         # TODOv3(mordred): make the executor name more unique --
         # perhaps hostname+pid.
         self.hostname = socket.gethostname()
+        self.zone = get_default(self.config, "executor", "zone", "default")
         self.log_streaming_port = log_streaming_port
         self.merger_lock = threading.Lock()
         self.verbose = False
@@ -630,7 +631,8 @@ class ExecutorServer(object):
         self.disk_accountant.start()
 
     def register(self):
-        self.executor_worker.registerFunction("executor:execute")
+        self.executor_worker.registerFunction("executor:execute:%s" %
+                                              self.zone)
         self.executor_worker.registerFunction("executor:stop:%s" %
                                               self.hostname)
         self.merger_worker.registerFunction("merger:merge")
@@ -753,7 +755,7 @@ class ExecutorServer(object):
             try:
                 job = self.executor_worker.getJob()
                 try:
-                    if job.name == 'executor:execute':
+                    if job.name.startswith('executor:execute'):
                         self.log.debug("Got execute job: %s" % job.unique)
                         self.executeJob(job)
                     elif job.name.startswith('executor:stop'):
